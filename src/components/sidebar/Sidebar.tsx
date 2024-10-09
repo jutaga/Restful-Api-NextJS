@@ -40,6 +40,7 @@ export const Sidebar = () => {
               alt="tailus logo"
               width={150}
               height={150}
+              priority={true}
             />
           </Link>
         </div>
@@ -51,6 +52,7 @@ export const Sidebar = () => {
             alt=""
             width={150}
             height={150}
+            priority={true}
             className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28"
           />
           <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
