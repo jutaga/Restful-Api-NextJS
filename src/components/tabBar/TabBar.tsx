@@ -1,6 +1,7 @@
 "use client";
 
 import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface Props {
@@ -12,11 +13,13 @@ export const TabBar = ({
   tabOptions = [1, 2, 3, 4, 5],
   currentTab = 1,
 }: Props) => {
+  const router = useRouter();
   const [selected, setSelected] = useState(currentTab);
 
   const onTabSelected = (tab: number) => {
     setSelected(tab);
     setCookie("currentTab", tab.toString());
+    router.refresh();
   };
 
   return (
@@ -27,7 +30,7 @@ export const TabBar = ({
         <div key={tab}>
           <input
             checked={selected === tab}
-            onChange={() =>{}}
+            onChange={() => {}}
             type="radio"
             id={`${tab}`}
             className="peer hidden"
