@@ -3,3 +3,4 @@ export { SidebarItem } from "./sidebarItem/SidebarItem";
 export { TopMenu } from "./topMenu/TopMenu";
 export { WidgetItem } from "./widgetItem/WidgetItem";
 export { TabBar } from "./tabBar/TabBar";
+export { LogOutButton } from "./sidebar/LogOutButton"

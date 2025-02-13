@@ -7,10 +7,12 @@ import {
   IoCheckboxOutline,
   IoCodeWorkingSharp,
   IoListOutline,
+  IoPersonOutline,
 } from "react-icons/io5";
 import { SidebarItem } from "../sidebarItem/SidebarItem";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { LogOutButton } from "./LogOutButton";
 
 const menuItems = [
   {
@@ -37,6 +39,11 @@ const menuItems = [
     icon: <IoBasketOutline />,
     title: "Products",
     path: "/dashboard/products",
+  },
+  {
+    icon: <IoPersonOutline />,
+    title: "Profile",
+    path: "/dashboard/profile",
   }
 ];
 
@@ -46,7 +53,7 @@ export const Sidebar = async() => {
 
   const avatarURL = (session?.user?.image)  ? session.user.image : "/images/image.png" ;
   const username = session?.user?.name || "No name";
- //const userRole = session?.user?.name || "No name";
+ const userRole = session?.user?.roles || ["client"] ;
 
 
   return (
@@ -80,7 +87,7 @@ export const Sidebar = async() => {
           <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
             {username}
           </h5>
-          <span className="hidden text-gray-400 lg:block">Admin</span>
+          <span className="hidden text-gray-400 lg:block capitalize">{userRole.join(", ")}</span>
         </div>
 
         <ul className="space-y-2 tracking-wide mt-8">
@@ -94,10 +101,7 @@ export const Sidebar = async() => {
       </div>
 
       <div className="px-6 -mx-6 pt-4 flex justify-between items-center border-t">
-        <button className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
-          <CiLogout />
-          <span className="group-hover:text-gray-700">Logout</span>
-        </button>
+        <LogOutButton />
       </div>
     </aside>
   );
