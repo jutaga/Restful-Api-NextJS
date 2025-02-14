@@ -13,6 +13,10 @@ model Todo {
   complete    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  userId      String
+
+  user        User      @relation(fields: [userId], references: [id])
 }
 
 //Auth.js 
@@ -56,6 +60,7 @@ model Session {
 model User {
   id            String    @id @default(uuid())
   name          String?
+  password      String?
   roles         String[]  @default(["client"])
   isActive      Boolean   @default(true)
   username      String?   @unique
@@ -63,13 +68,10 @@ model User {
   emailVerified DateTime?
   image         String?
 
-
   accounts      Account[]
   sessions      Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
 
-
+  todos         Todo[]
 }
 
 model VerificationToken {
