@@ -4,6 +4,8 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import { Adapter } from "next-auth/adapters";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { signInEmailPassword } from "@/auth/actions/auth-actions";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
@@ -15,6 +17,34 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
+
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: {
+          label: "Correo Electrónico",
+          type: "email",
+          placeholder: "Usuario@email.com",
+        },
+        password: {
+          label: "Contraseña",
+          type: "password",
+          placeholder: "********",
+        },
+      },
+      async authorize(credentials, req) {
+        const user = await signInEmailPassword(
+          credentials!.email,
+          credentials!.password
+        );
+
+        if (user) {
+          return user;
+        } else {
+          return null;
+        }
+      },
     }),
   ],
 
@@ -33,7 +63,7 @@ export const authOptions: NextAuthOptions = {
         },
       });
 
-      if(dbUser?.isActive === false){
+      if (dbUser?.isActive === false) {
         throw new Error("User is not active");
       }
 
@@ -42,10 +72,9 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token, user }) {
-      
       if (session.user) {
         session.user.id = token.id;
-        session.user.roles = token.roles ;
+        session.user.roles = token.roles;
       }
 
       return session;
